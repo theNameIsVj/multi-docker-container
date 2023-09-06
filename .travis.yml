@@ -1,0 +1,15 @@
+sudo: required
+services:
+  -docker
+
+before_install:
+  -docker build -t vjdevopsengineer/react-test -f ./client/dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true vjdevopsengineer/react-test npm test
+
+after_success:
+  -docker build -t vjdevopsengineer/mc-client ./client
+  -docker build -t vjdevopsengineer/mc-nginx ./nginx
+  -docker build -t vjdevopsengineer/mc-server ./server
+  -docker build -t vjdevopsengineer/mc-worker ./worker
